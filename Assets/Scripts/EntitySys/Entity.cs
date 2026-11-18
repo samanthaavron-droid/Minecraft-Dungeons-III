@@ -1,9 +1,10 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class Entity : MonoBehaviour
 {
     [SerializeField] private StatsTemplate statsTemplate;
-    private StatsRuntime statsRuntime;
+    protected StatsRuntime statsRuntime;
     public StatsRuntime GetStats { get { return statsRuntime; } }
     void Start()
     {
@@ -11,12 +12,20 @@ public class Entity : MonoBehaviour
             statsRuntime = new(statsTemplate);
     }
 
-    void Update()
+    protected virtual void Update()
     {
         
     }
-    void TakeDamage()
+    public void TakeDamage(float damage)
     {
-
+        statsRuntime.hp -= damage;
+        if (statsRuntime.hp <= 0)
+        {
+            Die();
+        }
     }
+    protected virtual void Move() { }
+    protected virtual void Roll() { }
+    protected virtual void Attack() { }
+    protected virtual void Die() { }
 }
