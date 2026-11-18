@@ -7,7 +7,8 @@ public class Entity : MonoBehaviour
     public StatsRuntime GetStats { get { return statsRuntime; } }
     void Start()
     {
-        
+        if (statsTemplate != null)
+            statsRuntime = new(statsTemplate);
     }
 
     void Update()
