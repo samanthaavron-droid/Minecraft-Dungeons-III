@@ -16,4 +16,9 @@ public class StatsTemplate : ScriptableObject
     public float attackRadius;
     public bool canMove;
     public float cooldown;
+    [Header("Item")]
+    public float heal;
+    public float coins;
+    public bool isWeapon;
+    public string itemName;
 }

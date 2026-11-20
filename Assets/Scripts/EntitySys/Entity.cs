@@ -8,9 +8,11 @@ public class Entity : MonoBehaviour
     protected StatsRuntime statsRuntime;
     public StatsRuntime GetStats { get { return statsRuntime; } }
     protected Rigidbody rb;
+    protected Inventory inventory;
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        inventory = GetComponent<Inventory>();
 
         if (statsTemplate != null)
             statsRuntime = new(statsTemplate);
@@ -39,6 +41,10 @@ public class Entity : MonoBehaviour
         {
             Die();
         }
+    }
+    public void AddScore(float score)
+    {
+        statsRuntime.coins += score;
     }
     protected virtual void Move(Vector2 input)
     {

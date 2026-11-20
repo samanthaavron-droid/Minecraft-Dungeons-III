@@ -12,12 +12,12 @@ public class EnemyBase : Entity
 
         base.FixedUpdate();
 
-        ScanForTarget();
+        ScanForPathfinding();
     }
-    private void ScanForTarget()
+    private void ScanForPathfinding()
     {
         Collider[] hits = Physics.OverlapSphere(transform.position, statsRuntime.scanRadius, LayerMask.GetMask("Player"));
-        Vector3 target = Vector3.zero;
+        statsRuntime.target = Vector3.zero;
 
         if (hits.Length > 0)
         {
@@ -25,10 +25,10 @@ public class EnemyBase : Entity
             if (distance > statsRuntime.goForAttackRadius)
             {
                 Vector2 randomDir = Directions[Random.Range(0, Directions.Length)] * statsRuntime.goForAttackRadius;
-                target = hits[0].transform.position + new Vector3(randomDir.x, 0, randomDir.y);
+                statsRuntime.target = hits[0].transform.position + new Vector3(randomDir.x, 0, randomDir.y);
             } else if (distance <= statsRuntime.goForAttackRadius + 0.5f)
             {
-                target = hits[0].transform.position;
+                statsRuntime.target = hits[0].transform.position;
             }
             //passing target to pathfinding
         }
