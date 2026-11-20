@@ -819,8 +819,8 @@ PlayerSettings:
   editorAssembliesCompatibilityLevel: 1
   m_RenderingPath: 1
   m_MobileRenderingPath: 1
-  metroPackageName: Minecraft Dungeons III
-  metroPackageVersion: 
+  metroPackageName: MinecraftDungeonsIII
+  metroPackageVersion: 1.0.0.0
   metroCertificatePath: 
   metroCertificatePassword: 
   metroCertificateSubject: 
@@ -828,7 +828,7 @@ PlayerSettings:
   metroCertificateNotAfter: 0000000000000000
   metroApplicationDescription: Minecraft Dungeons III
   wsaImages: {}
-  metroTileShortName: 
+  metroTileShortName: Minecraft Dungeons III
   metroTileShowName: 0
   metroMediumTileShowName: 0
   metroLargeTileShowName: 0
