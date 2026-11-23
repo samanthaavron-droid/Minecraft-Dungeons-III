@@ -25,7 +25,7 @@ public class StatsRuntime
     public float cooldownTimer { get; set; }
 
     public float heal { get; set; }
-    public float coins {  get; set; }
+    public int coins {  get; set; }
     public bool isWeapon { get; set; }
     public string itemName {  get; set; }
     public StatsRuntime(StatsTemplate s) //creates the active stats from template

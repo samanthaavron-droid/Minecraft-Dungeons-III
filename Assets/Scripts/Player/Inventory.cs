@@ -6,13 +6,14 @@ using UnityEngine.InputSystem;
 public class Inventory : MonoBehaviour
 {
     private List<StatsRuntime> weapons;
-    private Entity player;
-    [SerializeField] private StatsTemplate statsTemplate;
+    private PlayerBase player;
+    [Tooltip("Healing button stats")][SerializeField] private StatsTemplate statsTemplate;
     private StatsRuntime statsRuntime; //healing
-    [SerializeField] private InputActionReference heal;
+    [SerializeField] private InputActionReference heal; 
     void Start()
     {
-        player = GetComponent<Entity>();
+        player = GetComponent<PlayerBase>();
+        weapons = new List<StatsRuntime>();
 
         if (statsTemplate != null)
             statsRuntime = new(statsTemplate);
@@ -38,6 +39,7 @@ public class Inventory : MonoBehaviour
         if (itemStats.isWeapon == true)
         {
             weapons.Add(itemStats);
+            //updatating the weapons in hands
         }
         else
         {
@@ -52,6 +54,12 @@ public class Inventory : MonoBehaviour
         else
             return null;
     }
+
+
+
+
+
+
     private void OnEnable()
     {
         heal.action.Enable();

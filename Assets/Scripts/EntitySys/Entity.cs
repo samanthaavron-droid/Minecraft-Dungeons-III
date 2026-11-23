@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 using UnityEngine.Windows;
 
 public class Entity : MonoBehaviour
@@ -9,6 +10,7 @@ public class Entity : MonoBehaviour
     public StatsRuntime GetStats { get { return statsRuntime; } }
     protected Rigidbody rb;
     protected Inventory inventory;
+    [SerializeField] protected Image healthBar;
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -37,14 +39,21 @@ public class Entity : MonoBehaviour
     public void TakeDamage(float damage)
     {
         statsRuntime.hp -= damage;
+        UpdateHP();
+
+        Debug.Log(gameObject.name + "taken " + damage + " damage");
+
         if (statsRuntime.hp <= 0)
         {
             Die();
         }
     }
-    public void AddScore(float score)
+    private void UpdateHP()
     {
-        statsRuntime.coins += score;
+        if (healthBar != null)
+        {
+            healthBar.fillAmount = statsRuntime.hp / statsRuntime.maxhp;
+        }
     }
     protected virtual void Move(Vector2 input)
     {
