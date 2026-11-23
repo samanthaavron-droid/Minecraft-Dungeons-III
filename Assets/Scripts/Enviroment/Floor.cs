@@ -4,6 +4,7 @@ public class Floor : MonoBehaviour
 {
     [SerializeField] private StatsTemplate statsTemplate;
     protected StatsRuntime statsRuntime;
+    [SerializeField] private bool isLava;
     void Start()
     {
         if (statsTemplate != null)
@@ -18,6 +19,8 @@ public class Floor : MonoBehaviour
     }
     private void OnCollisionStay(Collision collision)
     {
+        if (isLava == false) return;
+
         Entity entity = collision.collider.GetComponent<Entity>();
         if (entity != null)
         {
