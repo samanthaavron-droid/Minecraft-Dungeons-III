@@ -1,21 +1,96 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.UI;
+using UnityEngine.Windows;
 
 public class Entity : MonoBehaviour
 {
     [SerializeField] private StatsTemplate statsTemplate;
-    private StatsRuntime statsRuntime;
+    protected StatsRuntime statsRuntime;
     public StatsRuntime GetStats { get { return statsRuntime; } }
+    protected Rigidbody rb;
+    protected Inventory inventory;
+    [SerializeField] protected Image healthBar;
     void Start()
     {
-        
+        rb = GetComponent<Rigidbody>();
+        inventory = GetComponent<Inventory>();
+
+        if (statsTemplate != null)
+            statsRuntime = new(statsTemplate);
     }
 
-    void Update()
+    protected virtual void Update()
     {
-        
+        if (statsRuntime == null) return;
     }
-    void TakeDamage()
+    protected virtual void FixedUpdate()
     {
+        if (statsRuntime == null) return;
 
+        if (Physics.Raycast(transform.position, -Vector3.up, statsRuntime.distanceToGround))
+        {
+            statsRuntime.isGrounded = true;
+        } else
+        {
+            statsRuntime.isGrounded = false;
+        }
+    }
+    public void TakeDamage(float damage)
+    {
+        statsRuntime.hp -= damage;
+        UpdateHP();
+
+        Debug.Log(gameObject.name + "taken " + damage + " damage");
+
+        if (statsRuntime.hp <= 0)
+        {
+            Die();
+        }
+    }
+    private void UpdateHP()
+    {
+        if (healthBar != null)
+        {
+            healthBar.fillAmount = statsRuntime.hp / statsRuntime.maxhp;
+        }
+    }
+    protected virtual void Move(Vector2 input)
+    {
+        if (statsRuntime == null) return;
+
+        bool moving = input.sqrMagnitude > 0.01f;
+
+        if (moving)
+        {
+            statsRuntime.movementDir = input.normalized;
+            float rotation = Mathf.Atan2(statsRuntime.movementDir.x, statsRuntime.movementDir.y) * Mathf.Rad2Deg;
+            transform.rotation = Quaternion.Euler(0f, rotation, 0f);
+        }
+
+        float rate = moving ? statsRuntime.accerelation : statsRuntime.deceleration;
+        float target = moving ? statsRuntime.maxSpeed : 0f;
+
+        statsRuntime.currentSpeed = Mathf.MoveTowards(statsRuntime.currentSpeed, target, rate * Time.deltaTime);
+
+        rb.linearVelocity = new Vector3(statsRuntime.movementDir.x * statsRuntime.currentSpeed, rb.linearVelocity.y, statsRuntime.movementDir.y * statsRuntime.currentSpeed);
+    }
+    protected virtual void Roll() { }
+    protected virtual void Attack()
+    {
+        Debug.Log("I attacked");
+    }
+    protected virtual void Die() { }
+    private void OnCollisionEnter(Collision collision) //determines the distance from center of the object to the floor for jumps
+    {
+        if (statsRuntime == null) return;
+
+        if (statsRuntime.distanceToGround == 0)
+        {
+            RaycastHit hit;
+            Physics.Raycast(transform.position, -Vector3.up, out hit, 10f);
+
+            statsRuntime.distanceToGround = hit.distance + 0.01f;
+        }
     }
 }
